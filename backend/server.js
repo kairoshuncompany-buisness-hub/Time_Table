@@ -1,34 +1,31 @@
+
+
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 
-
+// Routes
 const authRoutes = require("./routes/registration_route");
-
 
 const app = express();
 const PORT = 5000;
 
-
-// Middleware
+// ================= Middleware =================
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // replaces body-parser
 
-
-// Database connection
+// ================= Database =================
 connectDB();
 
-
-// Routes
+// ================= Routes =================
 app.use("/api", authRoutes);
 
-
+// ================= Health Check =================
 app.get("/", (req, res) => {
-res.send("Backend running successfully");
+  res.send("Backend running successfully");
 });
 
-
+// ================= Server =================
 app.listen(PORT, () => {
-console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
