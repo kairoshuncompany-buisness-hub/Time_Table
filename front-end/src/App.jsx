@@ -1,27 +1,22 @@
 
 
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register_Form";
 import Login from "./pages/Login_";
 import Space from "./pages/Space";
+import Teacher from "./pages/Add_teacher"; 
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        {/* Home */}
         <Route path="/" element={<Home />} />
-
-        {/* Auth */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-
-        {/* Dashboard */}
         <Route path="/space" element={<Space />} />
+        <Route path="/add-teacher" element={<Teacher />} /> {/* ✅ NEW */}
       </Routes>
     </Router>
   );
 }
-
