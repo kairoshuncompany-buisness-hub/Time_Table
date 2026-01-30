@@ -1,21 +1,37 @@
 
+
 import { useNavigate } from "react-router-dom";
 
 export default function Space() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // ================= LOGOUT =================
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
   };
 
-  // Navigate to Add Teacher page
+  // ================= NAVIGATIONS =================
   const goToAddTeacher = () => {
     navigate("/add-teacher");
   };
 
+  const goToViewTeachers = () => {
+    navigate("/view-teachers");
+  };
+
+  const goToCreateTimetable = () => {
+    navigate("/create-timetable");
+  };
+
+  const goToReports = () => {
+    navigate("/reports");
+  };
+
+  // ================= STATIC DATA =================
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
   const periods = [
     "Period 1",
     "Period 2",
@@ -70,7 +86,7 @@ export default function Space() {
           </div>
         </div>
 
-        {/* ================= TIMETABLE TABLE ================= */}
+        {/* ================= TIMETABLE ================= */}
         <div className="bg-white p-6 rounded-xl shadow overflow-x-auto">
           <h3 className="text-lg font-semibold mb-4 text-center">
             General Timetable
@@ -123,11 +139,24 @@ export default function Space() {
               Add Teacher
             </button>
 
-            <button className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800">
+            <button
+              onClick={goToViewTeachers}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
+              View Teachers
+            </button>
+
+            <button
+              onClick={goToCreateTimetable}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
               Create Timetable
             </button>
 
-            <button className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800">
+            <button
+              onClick={goToReports}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
               View Reports
             </button>
           </div>
@@ -136,3 +165,4 @@ export default function Space() {
     </div>
   );
 }
+

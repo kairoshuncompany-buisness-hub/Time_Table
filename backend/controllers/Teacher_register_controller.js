@@ -1,3 +1,5 @@
+
+// controllers/Teacher_register_controller.js
 const Teacher = require("../models/Teacher_register_model");
 const bcrypt = require("bcryptjs");
 
@@ -11,28 +13,23 @@ exports.registerTeacher = async (req, res) => {
 
     // Validation
     if (!schoolName || !name || !subjects || !email || !password) {
-      return res.status(400).json({
-        message: "All fields are required",
-      });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     if (!Array.isArray(subjects) || subjects.length === 0) {
-      return res.status(400).json({
-        message: "At least one subject is required",
-      });
+      return res.status(400).json({ message: "At least one subject is required" });
     }
 
-    // Check existing teacher
+    // Check if teacher exists
     const existingTeacher = await Teacher.findOne({ email });
     if (existingTeacher) {
-      return res.status(409).json({
-        message: "Teacher already exists",
-      });
+      return res.status(409).json({ message: "Teacher already exists" });
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create teacher
     const teacher = await Teacher.create({
       schoolName,
       name,
@@ -53,8 +50,24 @@ exports.registerTeacher = async (req, res) => {
     });
   } catch (error) {
     console.error("Teacher Register Error:", error);
-    res.status(500).json({
-      message: "Server error",
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+/**
+ * @desc   Get all teachers
+ * @route  GET /api/teachers
+ */
+exports.getAllTeachers = async (req, res) => {
+  try {
+    const teachers = await Teacher.find().select("-password"); // remove password
+
+    res.status(200).json({
+      count: teachers.length,
+      teachers,
     });
+  } catch (error) {
+    console.error("Get Teachers Error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
