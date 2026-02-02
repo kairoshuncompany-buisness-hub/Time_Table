@@ -8,7 +8,9 @@ const School = require("../models/register_model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-
+/* ===============================
+   HM REGISTRATION
+================================ */
 exports.registerHM = async (req, res) => {
   try {
     const {

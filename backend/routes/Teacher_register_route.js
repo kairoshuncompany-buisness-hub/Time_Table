@@ -16,3 +16,12 @@ router.post("/register", registerTeacher);
 router.get("/", getAllTeachers);
 
 module.exports = router;
+
+
+
+
+
+
+
+
+

@@ -60,6 +60,12 @@ exports.registerTeacher = async (req, res) => {
  */
 exports.getAllTeachers = async (req, res) => {
   try {
+      
+    const filter = {};
+    if (req.query.schoolName) {
+      filter.schoolName = req.query.schoolName;
+    }
+
     const teachers = await Teacher.find().select("-password"); // remove password
 
     res.status(200).json({
@@ -71,3 +77,17 @@ exports.getAllTeachers = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,33 +1,31 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ViewTeachers() {
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch teachers on component mount
   useEffect(() => {
+    // Fetch all teachers immediately
+    const fetchTeachers = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/teachers");
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch teachers");
+        }
+
+        setTeachers(data.teachers);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
     fetchTeachers();
   }, []);
-
-  const fetchTeachers = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/teachers");
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch teachers");
-      }
-
-      setTeachers(data.teachers);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -42,18 +40,11 @@ export default function ViewTeachers() {
         </button>
       </div>
 
-      {/* Loading */}
-      {loading && (
-        <p className="text-center text-gray-500">Loading teachers...</p>
-      )}
-
       {/* Error */}
-      {error && (
-        <p className="text-center text-red-500">{error}</p>
-      )}
+      {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* Table */}
-      {!loading && teachers.length > 0 && (
+      {teachers.length > 0 ? (
         <div className="bg-white rounded-xl shadow overflow-x-auto">
           <table className="w-full text-sm text-left border">
             <thead className="bg-gray-100">
@@ -79,12 +70,10 @@ export default function ViewTeachers() {
             </tbody>
           </table>
         </div>
-      )}
-
-      {/* Empty state */}
-      {!loading && teachers.length === 0 && (
-        <p className="text-center text-gray-500">No teachers found</p>
+      ) : (
+        !error && <p className="text-center text-gray-500">No teachers found</p>
       )}
     </div>
   );
 }
+

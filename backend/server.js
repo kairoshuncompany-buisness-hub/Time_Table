@@ -1,5 +1,8 @@
 
 
+
+
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -7,7 +10,7 @@ const connectDB = require("./config/db");
 // ================= ROUTES =================
 const authRoutes = require("./routes/registration_route");
 const teacherRoutes = require("./routes/Teacher_register_route");
-const ClassRoutes = require("./routes/Class_Routes"); 
+const classRoutes = require("./routes/Class_Routes"); // ✅ lowercase variable
 
 const app = express();
 const PORT = 5000;
@@ -22,7 +25,7 @@ connectDB();
 // ================= API ROUTES =================
 app.use("/api", authRoutes);                 
 app.use("/api/teachers", teacherRoutes);     
-app.use("/api/classes", ClassRoutes);     
+app.use("/api/classes", classRoutes);      // ✅ fixed variable
 
 // ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
@@ -33,3 +36,6 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
+
