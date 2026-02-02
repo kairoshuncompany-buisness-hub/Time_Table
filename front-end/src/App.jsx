@@ -8,7 +8,7 @@ import Login from "./pages/Login_";
 import Space from "./pages/Space";
 import Teacher from "./pages/Add_teacher";
 import ViewTeachers from "./pages/View_teacher";
-import Subject from "./pages/Subjects";
+import Subject from "./pages/Class";
 
 export default function App() {
   return (

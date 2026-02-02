@@ -1,31 +1,35 @@
+
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 
-// Routes
+// ================= ROUTES =================
 const authRoutes = require("./routes/registration_route");
-const teacherRoutes = require("./routes/Teacher_register_route"); 
+const teacherRoutes = require("./routes/Teacher_register_route");
+const ClassRoutes = require("./routes/Class_Routes"); 
 
 const app = express();
 const PORT = 5000;
 
-// ================= Middleware =================
+// ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json()); // replaces body-parser
 
-// ================= Database =================
+// ================= DATABASE =================
 connectDB();
 
-// ================= Routes =================
-app.use("/api", authRoutes);                 // HM login / register
-app.use("/api/teachers", teacherRoutes);     // ✅ Teacher APIs
+// ================= API ROUTES =================
+app.use("/api", authRoutes);                 
+app.use("/api/teachers", teacherRoutes);     
+app.use("/api/classes", ClassRoutes);     
 
-// ================= Health Check =================
+// ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
   res.send("Backend running successfully");
 });
 
-// ================= Server =================
+// ================= SERVER =================
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
