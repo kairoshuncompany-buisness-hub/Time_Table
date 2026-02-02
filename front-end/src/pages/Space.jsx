@@ -1,5 +1,6 @@
 
 
+
 import { useNavigate } from "react-router-dom";
 
 export default function Space() {
@@ -27,6 +28,11 @@ export default function Space() {
 
   const goToReports = () => {
     navigate("/reports");
+  };
+
+  // ✅ NEW: Add Subject Navigation
+  const goToAddSubject = () => {
+    navigate("/add-subject");
   };
 
   // ================= STATIC DATA =================
@@ -159,10 +165,17 @@ export default function Space() {
             >
               View Reports
             </button>
+
+            {/* ✅ NEW: ADD SUBJECT */}
+            <button
+              onClick={goToAddSubject}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
+              Add Subject
+            </button>
           </div>
         </div>
       </main>
     </div>
   );
 }
-
