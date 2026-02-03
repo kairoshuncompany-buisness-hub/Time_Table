@@ -1,8 +1,11 @@
 
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Teacher() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     schoolName: "",
     name: "",
@@ -24,7 +27,6 @@ export default function Teacher() {
   const handleSubjectKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-
       const value = subjectInput.trim();
       if (!value) return;
 
@@ -34,12 +36,10 @@ export default function Teacher() {
           subjects: [...form.subjects, value],
         });
       }
-
       setSubjectInput("");
     }
   };
 
-  // Remove subject
   const removeSubject = (subject) => {
     setForm({
       ...form,
@@ -58,9 +58,7 @@ export default function Teacher() {
         "http://localhost:5000/api/teachers/register",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),
         }
       );
@@ -89,10 +87,20 @@ export default function Teacher() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow p-8">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow p-8 relative">
+
+        {/* BACK BUTTON */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 border border-black px-3 py-1 rounded-lg text-sm hover:bg-black hover:text-white transition"
+        >
+          ← Back
+        </button>
+
         <h2 className="text-2xl font-semibold text-center mb-2">
           Add Teacher
         </h2>
+
         <p className="text-sm text-gray-500 text-center mb-6">
           Enter teacher details
         </p>
@@ -139,13 +147,11 @@ export default function Teacher() {
             <label className="text-sm font-medium">
               Subjects (press Enter)
             </label>
-
             <input
               type="text"
               value={subjectInput}
               onChange={(e) => setSubjectInput(e.target.value)}
               onKeyDown={handleSubjectKeyDown}
-              placeholder="Maths, Physics..."
               className="w-full mt-1 px-4 py-2 border rounded-xl"
             />
 
@@ -206,13 +212,3 @@ export default function Teacher() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-

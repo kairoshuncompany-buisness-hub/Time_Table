@@ -1,7 +1,10 @@
 
 
 
+
+
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Space() {
   const navigate = useNavigate();
@@ -14,30 +17,14 @@ export default function Space() {
   };
 
   // ================= NAVIGATIONS =================
-  const goToAddTeacher = () => {
-    navigate("/add-teacher");
-  };
-
-  const goToViewTeachers = () => {
-    navigate("/view-teachers");
-  };
-
-  const goToCreateTimetable = () => {
-    navigate("/create-timetable");
-  };
-
-  const goToReports = () => {
-    navigate("/reports");
-  };
-
-  // ✅ NEW: Add Subject Navigation
-  const goToAddSubject = () => {
-    navigate("/add-subject");
-  };
+  const goToAddTeacher = () => navigate("/add-teacher");
+  const goToViewTeachers = () => navigate("/view-teachers");
+  const goToCreateTimetable = () => navigate("/create-timetable");
+  const goToReports = () => navigate("/reports");
+  const goToAddSubject = () => navigate("/add-subject");
 
   // ================= STATIC DATA =================
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
   const periods = [
     "Period 1",
     "Period 2",
@@ -48,6 +35,22 @@ export default function Space() {
     "Period 7",
     "Period 8",
   ];
+
+  // ================= SCHEDULE DATA =================
+  const [schedules, setSchedules] = useState([]);
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("schedules")) || [];
+    setSchedules(saved);
+  }, []);
+
+  // Helper: Get subject for class
+  const getSubjectsForClass = (day, period) => {
+    // Simple example: cycle through classesPerWeek
+    if (!schedules.length) return "—";
+    const entry = schedules[period % schedules.length];
+    return `${entry.subject} (${entry.class})`;
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -80,15 +83,45 @@ export default function Space() {
             <h3 className="text-sm text-gray-500">Total Teachers</h3>
             <p className="text-2xl font-bold mt-2">12</p>
           </div>
-
           <div className="bg-white p-6 rounded-xl shadow">
             <h3 className="text-sm text-gray-500">Total Classes</h3>
             <p className="text-2xl font-bold mt-2">8</p>
           </div>
-
           <div className="bg-white p-6 rounded-xl shadow">
             <h3 className="text-sm text-gray-500">Timetables</h3>
-            <p className="text-2xl font-bold mt-2">5</p>
+            <p className="text-2xl font-bold mt-2">{schedules.length}</p>
+          </div>
+        </div>
+
+        {/* ================= QUICK ACTIONS ================= */}
+        <div className="bg-white p-6 rounded-xl shadow">
+          <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={goToAddTeacher}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
+              Add Teacher
+            </button>
+            <button
+              onClick={goToViewTeachers}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
+              View Teachers
+            </button>
+            <button
+              onClick={goToCreateTimetable}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
+              Scheduler
+            </button>
+          
+            <button
+              onClick={goToAddSubject}
+              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
+            >
+              Add Class/Section
+            </button>
           </div>
         </div>
 
@@ -97,83 +130,33 @@ export default function Space() {
           <h3 className="text-lg font-semibold mb-4 text-center">
             General Timetable
           </h3>
-
           <table className="w-full border border-gray-200 text-sm text-center">
             <thead className="bg-gray-100">
               <tr>
                 <th className="border px-4 py-2">Day</th>
-                {periods.map((period, index) => (
-                  <th key={index} className="border px-4 py-2">
+                {periods.map((period, idx) => (
+                  <th key={idx} className="border px-4 py-2">
                     {period}
                   </th>
                 ))}
               </tr>
             </thead>
-
             <tbody>
               {days.map((day, dayIndex) => (
                 <tr key={dayIndex} className="hover:bg-gray-50">
-                  <td className="border px-4 py-2 font-medium">
-                    {day}
-                  </td>
-
+                  <td className="border px-4 py-2 font-medium">{day}</td>
                   {periods.map((_, periodIndex) => (
                     <td
                       key={periodIndex}
-                      className="border px-4 py-2 text-gray-400"
+                      className="border px-4 py-2 text-gray-700"
                     >
-                      —
+                      {getSubjectsForClass(dayIndex, periodIndex)}
                     </td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-
-        {/* ================= QUICK ACTIONS ================= */}
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h3 className="text-lg font-semibold mb-4">
-            Quick Actions
-          </h3>
-
-          <div className="flex flex-wrap gap-4">
-            <button
-              onClick={goToAddTeacher}
-              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
-            >
-              Add Teacher
-            </button>
-
-            <button
-              onClick={goToViewTeachers}
-              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
-            >
-              View Teachers
-            </button>
-
-            <button
-              onClick={goToCreateTimetable}
-              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
-            >
-              Create Timetable
-            </button>
-
-            <button
-              onClick={goToReports}
-              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
-            >
-              View Reports
-            </button>
-
-            {/* ✅ NEW: ADD SUBJECT */}
-            <button
-              onClick={goToAddSubject}
-              className="px-5 py-3 bg-black text-white rounded-xl hover:bg-gray-800"
-            >
-              Add Subject
-            </button>
-          </div>
         </div>
       </main>
     </div>
